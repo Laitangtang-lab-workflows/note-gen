@@ -1,0 +1,9 @@
+# regenerable artifacts stay out
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.pytest_cache/
+.DS_Store
+Thumbs.db

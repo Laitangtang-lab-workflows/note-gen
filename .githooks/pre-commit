@@ -1,0 +1,11 @@
+#!/bin/sh
+# 防泄漏护栏：暂存内容含内部标识（机器路径、账号、集群别名、令牌）即拒绝提交。
+# 激活：git config core.hooksPath .githooks
+PAT='HASEE|synchronize_directory|/home/li|scnet|Laitangtang/|ghp_|github_pat_|sk-[A-Za-z0-9]{20}'
+hit=$(git diff --cached -U0 --no-color -- . ':(exclude).githooks' | grep -E '^\+' | grep -vE '^\+\+\+' | grep -E "$PAT")
+if [ -n "$hit" ]; then
+  echo "[leak-guard] staged content matches internal identifiers (machine paths, accounts, tokens):"
+  echo "$hit"
+  echo "fix: rewrite to a generic form, then commit again. If you are sure it is a false positive: git commit --no-verify"
+  exit 1
+fi
